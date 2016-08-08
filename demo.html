@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+	*{margin:0; padding:0;}
+	#main{height:185px;width:900px;border:1px solid #ccc;margin:40px auto;overflow:hidden;position:relative;}
+	#pro{list-style-type:none;}
+	#pro li{float:left;margin:10px;}
+	#nav{height:30px;background:url(images/nav_bg.png) repeat-x;width:900px;list-style-type:none;font-size:14px;position:relative;position:absolute;top:155px;}
+	#nav li{float:left;height:30px;width:60px;line-height:30px;cursor:pointer;text-align:center;}
+	#nav span{position:absolute;top:-6px;left:400px;}
+</style>
+<title>苹果官网作品</title>
+<script type="text/javascript">
+window.onload=function(){
+	var oUl=document.getElementById('pro');
+	var aLi=oUl.getElementsByTagName('li');
+	var oNav=document.getElementById('nav');
+	var oProducts=document.getElementById('products');
+	var oMore=document.getElementById('more');
+	var aSpan=document.getElementsByTagName('span');
+	var timer2=null;
+	var timer3=null;
+	var j=0;
+	oUl.style.width=(aLi[0].offsetWidth+20)*aLi.length+'px';
+	for(var i=0;i<aLi.length;i++){
+		aLi[i].style.left=aLi[i].offsetLeft+'px';
+	}
+	for(var i=0;i<aLi.length;i++){
+		aLi[i].style.position='absolute';
+		aLi[i].style.margin=0;
+	}	
+	oMore.onclick=function(){
+		moveStart(aSpan[0],{'left':parseInt(oMore.offsetLeft+oMore.offsetWidth/3)},next());
+	}
+	oProducts.onclick=function(){
+		moveStart(aSpan[0],{'left':parseInt(oProducts.offsetLeft+oProducts.offsetWidth/3)},last());
+	}
+
+
+	function next(){
+		if(j<aLi.length)
+			var now=aLi[j].offsetLeft-899;
+			//alert(aLi[j]);
+			startMove2(aLi[j],now);
+			clearTimeout(timer2);
+			timer2=setTimeout(next,150);
+			j++;
+		} 
+	
+	var k=aLi.length-1;
+	function last(){
+		if(k>-1){
+			var now=aLi[k].offsetLeft+901;
+			startMove2(aLi[k],now);
+			clearTimeout(timer3);
+			timer3=setTimeout(last,150);
+			k--;
+		}
+	}
+	function startMove2(obj,target){
+		//var oText=document.getElementById('text');
+	    clearInterval(obj.timer);
+
+		obj.iSpeed=0;
+		obj.timer=setInterval(function(){
+			
+				if(Math.abs(obj.iSpeed)>1||Math.abs(target-parseFloat(obj.style.left))>1){
+					obj.iSpeed+=(target-obj.offsetLeft)/5;
+					obj.iSpeed*=0.7;	//摩擦力
+
+					obj.style.left=parseInt(obj.offsetLeft+obj.iSpeed)+'px';
+				}else{
+					clearInterval(obj.timer);
+					obj.style.left=target+'px';
+				}
+		},30);                                
+	}
+	function getClass(obj,attr){ 
+	var Arry=[];
+	var i=0;
+	var aAll=document.getElementsByTagName('*');
+	for(i=0;i<aAll.length;i++){ 
+		if(aAll[i].className==attr){ 
+			Arry.push(aAll[i]);
+		}
+	}
+	return Arry;
+}
+var timer=null;
+ function moveStart(obj,json,fn){ 
+ 	clearInterval(obj.timer);
+ 	var iOpen=true;
+ 	obj.timer=setInterval(function(){ 
+ 		for(var attr in json){
+ 		var iCur=0;
+ 		
+ 		if(attr=='opacity'){
+ 			iCur=parseInt((parseFloat(getStyle(obj,attr)))*100);
+ 		}else{
+ 			iCur=parseInt(getStyle(obj,attr));
+ 		} 
+ 			var speed=(json[attr]-iCur)/8;
+ 			speed=speed>0?Math.ceil(speed):Math.floor(speed);
+ 			if(iCur!=json[attr]){ 
+ 					iOpen=false;
+ 				}
+ 			if(iOpen){
+ 					clearInterval(obj.timer);
+ 				if(fn){
+ 					fn();
+ 				}
+ 			}else{ 
+ 				if(attr=='opacity'){
+ 					obj.style.filter='alpha(opacity='+iCur+speed+')';
+ 					obj.style.opacity=(iCur+speed)/100;
+ 				}else{
+ 				obj.style[attr]=iCur+speed+'px';
+ 				}
+ 			}
+ 			}
+ 		},10);
+ }
+ function getStyle(obj,attr){
+ 	 if(obj.currentStyle){
+		return obj.currentStyle[attr];
+	}else{
+		return getComputedStyle(obj,false)[attr];
+	}
+}
+}
+
+</script>
+</head>
+<body>
+	<div id="main">
+		<ul id="pro">
+			<li><img src="images/1.jpg"/></li>
+			<li><img src="images/2.jpg"/></li>
+			<li><img src="images/3.jpg"/></li>
+			<li><img src="images/4.jpg"/></li>
+			<li><img src="images/5.jpg"/></li>
+			<li><img src="images/6.jpg"/></li>
+			<li><img src="images/7.jpg"/></li>
+			<li><img src="images/8.jpg"/></li>
+			<li><img src="images/9.jpg"/></li>
+			<li><img src="images/10.jpg"/></li>
+			<li><img src="images/11.jpg"/></li>
+			<li><img src="images/12.jpg"/></li>
+		</ul>	
+		<ul id="nav">
+			<span><img src="images/active.png"/></span>
+			<li id="products" style="margin-left:380px;">products</li>
+			<li id="more" style="margin-left:10px;"> more</li>
+		</ul>	
+	</div>
+</body>
+</html>
